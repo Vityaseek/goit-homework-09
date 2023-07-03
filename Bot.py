@@ -52,6 +52,8 @@ def add(*args: list):
             return "This number already exists"
         else:
             contact[name].append(phone)
+    elif len(args) < 2:
+        raise IndexError
     else:
         raise ValueError
 
@@ -89,7 +91,7 @@ def parser_text(text: str) -> tuple[callable, tuple[str] | None]:
 
 def main():
     while True:
-        user_input = input(">>>").casefold()
+        user_input = input(">>> Wait command:").casefold()
         if user_input in lst_bey:
             print("Good bye!")
             break
