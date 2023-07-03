@@ -11,6 +11,8 @@ def input_error(func):
             return func(*args)
         except IndexError:
             return "Please write Name and Phone, though a space"
+        except KeyError:
+            return "Sorry, this not found, try again"
     return inner
 
 
@@ -18,20 +20,22 @@ def unknown_command(*args):
     return "Unknown command"
 
 
+@input_error
 def phones(*args):
     if len(args) > 1:
         return "Please write only username"
-    return contact[args[0]]
+    for i in contact[args[0]]:
+        return i
 
 
 def show():
     string = ''
     x = ''
     for i, c in contact.items():
-        for p in c:
-            string = f"{i}: {p}"
-            x += string + '\n'
-            string = ""
+        # string = rf"{i}: {c}"
+        string = '{}:{}'.format(i, c)
+        x += string + '\n'
+        string = ""
     return x.strip('\n')
 
 
@@ -51,7 +55,12 @@ def hello(*args):
 
 @input_error
 def change(*args):
-    contact[args[0]] = args[1]
+    name = args[0]
+    phone = args[1]
+    if name in contact:
+        contact[name] = phone
+    else:
+        return "Not found name"
     return "Change success"
 
 
