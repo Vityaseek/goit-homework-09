@@ -1,8 +1,9 @@
-import sys
+import re
 from collections import defaultdict
 
-contact = defaultdict()
+contact = defaultdict(list)
 lst_bey = ["good bye", "close", "exit"]
+pattern = r'[A-Za-z]{1,} [0-9]{1,}'
 
 
 def input_error(func):
@@ -12,7 +13,9 @@ def input_error(func):
         except IndexError:
             return "Please write Name and Phone, though a space"
         except KeyError:
-            return "Sorry, this not found, try again"
+            return "Sorry, this name is not found, try again"
+        except ValueError:
+            return "Sorry,Incorrect input, enter the name using the letters of the Latin alphabet and the phone number using numbers."
     return inner
 
 
@@ -32,19 +35,25 @@ def show():
     string = ''
     x = ''
     for i, c in contact.items():
-        # string = rf"{i}: {c}"
-        string = '{}:{}'.format(i, c)
-        x += string + '\n'
-        string = ""
-    return x.strip('\n')
+        string = f"{i}: {c}\n"
+        x += string
+    return x.strip("\n")
 
 
 @input_error
-def add(*args):
-    name = args[0]
-    phone = args[1]
-    if name and phone:
-        contact[name] = [phone]
+def add(*args: list):
+    string = ''
+    for i in args:
+        string = string + i + ' '
+    if re.search(pattern, string):
+        name = args[0]
+        phone = int(args[1])
+        if phone in contact[name]:
+            return "This number already exists"
+        else:
+            contact[name].append(phone)
+    else:
+        raise ValueError
 
     return "Add success"
 
@@ -56,7 +65,7 @@ def hello(*args):
 @input_error
 def change(*args):
     name = args[0]
-    phone = args[1]
+    phone = int(args[1])
     if name in contact:
         contact[name] = phone
     else:
