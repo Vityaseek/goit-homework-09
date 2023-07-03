@@ -29,6 +29,8 @@ def phones(*args):
         return "Please write only username"
     for i in contact[args[0]]:
         return i
+    if args[0] != contact[args]:
+        raise KeyError
 
 
 def show():
