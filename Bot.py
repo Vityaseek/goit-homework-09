@@ -15,7 +15,7 @@ def input_error(func):
         except KeyError:
             return "Sorry, this name is not found, try again"
         except ValueError:
-            return "Sorry,Incorrect input, enter the name using the letters of the Latin alphabet and the phone number using numbers."
+            return "Sorry,Incorrect input, enter the name using the letters and the phone number using numbers.Name and Phone write through a space"
     return inner
 
 
