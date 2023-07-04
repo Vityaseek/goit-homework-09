@@ -1,7 +1,7 @@
 import re
 from collections import defaultdict
 
-contact = defaultdict(list)
+contact = defaultdict(dict)
 lst_bey = ["good bye", "close", "exit"]
 pattern = r'[A-Za-z]{1,} [0-9]{1,}'
 
@@ -25,11 +25,12 @@ def unknown_command(*args):
 
 @input_error
 def phones(*args):
+    name = args[0]
     if len(args) > 1:
         return "Please write only username"
-    for i in contact[args[0]]:
-        return i
-    if args[0] != contact[args]:
+    if name in contact:
+        return contact[name]
+    else:
         raise KeyError
 
 
@@ -49,11 +50,11 @@ def add(*args: list):
         string = string + i + ' '
     if re.search(pattern, string):
         name = args[0]
-        phone = int(args[1])
+        phone = args[1]
         if phone in contact[name]:
-            return "This number already exists"
+            return "This name or number already exists, if you want change number, use command - 'change'"
         else:
-            contact[name].append(phone)
+            contact[name] = phone
     elif len(args) < 2:
         raise IndexError
     else:
@@ -69,7 +70,7 @@ def hello(*args):
 @input_error
 def change(*args):
     name = args[0]
-    phone = int(args[1])
+    phone = args[1]
     if name in contact:
         contact[name] = phone
     else:
